@@ -8,8 +8,12 @@ const socket = io()
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true
 })
-roomName.innerText = `${room}`
-userList.innerText = `${username}`
+socket.on('roomUsers', ({ room, users }) => {
+  outputRoomName(room)
+  outputUsers(users)
+})
+
+socket.emit('joinRoom', { username, room })
 
 socket.on('receive-message', message => {
   outputMessage(message)
@@ -18,7 +22,6 @@ socket.on('receive-message', message => {
 chatForm.addEventListener('submit', (event) => {
   event.preventDefault()
   const message = event.target.elements.msg.value
-  console.log('msg', event.target.elements.msg)
   outputMessage(message)
   socket.emit('send-message', message)
 })
@@ -32,4 +35,14 @@ function outputMessage(message) {
   `
   chatMessages.appendChild(messageDiv)
   chatForm.elements.msg.value = ``
+}
+
+function outputRoomName(room) {
+  roomName.innerText = room
+}
+
+function outputUsers(users) {
+  userList.innerHTML = `
+    ${users.map(user => `<li>${user.username}</li>`).join('')}
+  `
 }
