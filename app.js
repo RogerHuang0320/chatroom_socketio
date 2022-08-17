@@ -1,4 +1,3 @@
-var qs = require('qs')
 var http = require('http')
 var path = require('path')
 var socketio = require('socket.io')
@@ -21,6 +20,11 @@ io.on('connection', function (socket) {
       room: user.room,
       users: getRoomUsers(user.room)
     })
+  })
+
+  socket.on('send-message', message => {
+    const user = getCurrentUser(socket.id)
+    io.to(user.room).emit('receive-message', formatMessage(user.username, message))
   })
 })
 

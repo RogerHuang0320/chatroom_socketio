@@ -22,7 +22,6 @@ socket.on('receive-message', message => {
 chatForm.addEventListener('submit', (event) => {
   event.preventDefault()
   const message = event.target.elements.msg.value
-  outputMessage(message)
   socket.emit('send-message', message)
 })
 
@@ -30,8 +29,8 @@ function outputMessage(message) {
   const messageDiv = document.createElement('div')
   messageDiv.classList.add('message')
   messageDiv.innerHTML = `
-  <p class="meta">${username}</p>
-  <p class="text">${message}</p>
+  <p class="meta">${message.username}</p>
+  <p class="text">${message.text}</p>
   `
   chatMessages.appendChild(messageDiv)
   chatForm.elements.msg.value = ``
