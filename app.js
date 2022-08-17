@@ -13,12 +13,8 @@ app.use(express.urlencoded({ extended: true }))
 
 //用 socket 方式建立連線
 io.on('connection', function (socket) {
-  console.log(socket.id)
-  // 建立一個 "sendMessage" 的監聽
-  socket.on("sendMessage", function (message) {
-    console.log(message)
-    // 當收到事件的時候，也發送一個 "allMessage" 事件給所有的連線用戶
-    io.emit("allMessage", message)
+  socket.on('send-message', message => {
+    socket.broadcast.emit('receive-message', message)
   })
 })
 
