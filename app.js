@@ -26,6 +26,16 @@ io.on('connection', function (socket) {
     const user = getCurrentUser(socket.id)
     io.to(user.room).emit('receive-message', formatMessage(user.username, message))
   })
+
+  socket.on('disconnect', () => {
+    const user = userLeave(socket.id)
+    if (user) {
+      io.to(user.room).emit('roomUsers', {
+        room: user.room,
+        users: getRoomUsers(user.room)
+      })
+    }
+  })
 })
 
 server.listen(PORT, () => console.log('App is running'))
