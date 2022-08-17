@@ -1,4 +1,4 @@
-var fs = require('fs')
+var qs = require('qs')
 var http = require('http')
 var path = require('path')
 var socketio = require('socket.io')
@@ -9,6 +9,7 @@ const app = require('express')()
 var server = http.createServer(app);
 var io = socketio(server);
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.urlencoded({ extended: true }))
 
 //用 socket 方式建立連線
 io.on('connection', function (socket) {

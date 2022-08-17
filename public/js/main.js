@@ -8,6 +8,9 @@ const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true
 })
 
+console.log('username', username)
+
+
 const socket = io()
 socket.on('connection', () => {
   roomName.innerHTML += `
